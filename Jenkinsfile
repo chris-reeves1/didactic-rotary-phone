@@ -10,7 +10,12 @@ pipeline{
                 retry(2)
             }
             steps{
-            sh "mkdir -p jenkins-test"
+            sh """ if [ ! -d jenkins-test ]; then
+                mkdir jenkins-test
+                else
+                    echo "alread exists"
+                fi
+                """
             }
         }
         stage("add a file"){
