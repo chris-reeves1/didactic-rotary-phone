@@ -21,7 +21,7 @@ pipeline{
     }
     post{
         always {
-            archiveArtifacts Archive: 'jenkins-test/file1.txt', allowEmptyArchive: true
+            archiveArtifacts artifacts: 'jenkins-test/file1.txt', allowEmptyArchive: true
         }
     }
 }
