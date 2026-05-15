@@ -39,7 +39,7 @@ pipeline {
                 stage("Initial filesystem scan") {
                     steps {
                         sh """
-                            trivy fs /tmp/trivycache-fs --format json -o trivy-report.json .
+                            trivy fs --cache-dir /tmp/trivycache-fs --format json -o trivy-report.json .
                         """
                     }
                     post {
