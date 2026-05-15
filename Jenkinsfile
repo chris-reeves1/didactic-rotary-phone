@@ -39,7 +39,7 @@ pipeline {
                 stage("Initial filesystem scan") {
                     steps {
                         sh """
-                            trivy fs --format json -o trivy-report.json .
+                            trivy fs /tmp/trivycache-fs --format json -o trivy-report.json .
                         """
                     }
                     post {
@@ -188,7 +188,7 @@ pipeline {
                 stage("Security scan") {
                     steps {
                         sh """
-                            trivy image --cache-dir .trivycache-image --format json -o trivy-image-report.json ${FINAL_IMAGE}
+                            trivy image --cache-dir /tmp/trivycache-image --format json -o trivy-image-report.json ${FINAL_IMAGE}
                         """
                     }
 
@@ -203,7 +203,7 @@ pipeline {
                     steps {
                         sh """
                             trivy image \
-                            --cache-dir .trivycache-sbom \
+                            --cache-dir /tmp/trivycache-sbom \
                             --format cyclonedx \
                             --output flask-app-sbom.cdx.json \
                             ${FINAL_IMAGE}
