@@ -26,7 +26,7 @@ pipeline {
 
         stage('Quality Gate Input') {
             steps {
-                input message: "Did the SonarQube quality gate pass? Verify at: ${SONAR_HOST_URL}", ok: "Proceed"
+                input message: "Quality gate pass? Verify at: ${SONAR_HOST_URL}", ok: "Proceed"
             }
         }
     }
