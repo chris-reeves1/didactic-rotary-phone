@@ -247,12 +247,12 @@ pipeline {
                 sh """
                     docker rm -f flask-app mynginx 2>/dev/null || true
 
-                    docker run -d --rm \
+                    docker run -d \
                         --name flask-app \
                         --network new-network \
                         ${FINAL_IMAGE}
 
-                    docker run -d --rm \
+                    docker run -d \
                         --name mynginx \
                         --network new-network \
                         -p 80:80 \
