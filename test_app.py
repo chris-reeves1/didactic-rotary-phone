@@ -3,7 +3,7 @@ from app import app
 
 class FlaskAppTests(unittest.TestCase):
 
-    def setup(self):
+    def setUp(self):
         self.client = app.test_client()
 
     def test_home_route(self):
