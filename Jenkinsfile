@@ -1,5 +1,35 @@
-pipeline{
-    
+pipeline {
+    agent any
+
+    environment {
+        SONAR_HOST_URL    = "http://172.31.35.75:9000"
+        SONAR_PROJECT_KEY = "flask-app"
+    }
+
+    stages {
+        stage('SonarQube Scan') {
+            steps {
+                withCredentials([string(credentialsId: 'sonarqube-token-id', variable: 'SONAR_TOKEN')]) {
+                    sh """
+                        docker run --rm \
+                        -e SONAR_HOST_URL="${SONAR_HOST_URL}" \
+                        -e SONAR_TOKEN="${SONAR_TOKEN}" \
+                        -v "${WORKSPACE}:/usr/src" \
+                        sonarsource/sonar-scanner-cli \
+                        -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
+                        -Dsonar.sources=. \
+                        -Dsonar.exclusions="**/venv/**,**/tests/**,**/*.log,docker-compose.yml"
+                    """
+                }
+            }
+        }
+
+        stage('Quality Gate Input') {
+            steps {
+                input message: "Did the SonarQube quality gate pass? Verify at: ${SONAR_HOST_URL}", ok: "Proceed"
+            }
+        }
+    }
 }
 
 /*
@@ -11,19 +41,26 @@ parameters{ booleanParam(
     )}
 
 environemnt{
-    dockerhub
-    image_tag
-    original_image
-    slim_image
-    nginx_image
-    dockerhub_repo
+    dockerhub = credentials('dockerhub')
+    image_tag = "${BUILD_NUMBER}"
+    original_image = "flask-app:${BUILD_NUMBER}-original"
+    slim_image = "flask-app:${BUILD_NUMBER}-slim"
+    nginx_image = "mynginx:${BUILD_NUMBER}"
+    dockerhub_repo = chrisreeves1/flask-app
+    sonar_host_url = "http://172.31.35.75:9000"
+    SONAR_PROJECT_KEY = "flask-app"
 }
 
 fs scan
+ - trivy 
 
 clean up/prep
+- remove containers + networks
 
 unit test
+
+sonarqube Scan (gated):
+
 
 build original images
 
