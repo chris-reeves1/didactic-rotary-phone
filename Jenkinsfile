@@ -187,7 +187,7 @@ pipeline {
                 stage("Security scan") {
                     steps {
                         sh """
-                            trivy image --format json -o trivy-image-report.json ${FINAL_IMAGE}
+                            trivy image --cache-dir .trivycache-image --format json -o trivy-image-report.json ${FINAL_IMAGE}
                         """
                     }
 
@@ -202,6 +202,7 @@ pipeline {
                     steps {
                         sh """
                             trivy image \
+                            --cache-dir .trivycache-sbom \
                             --format cyclonedx \
                             --output flask-app-sbom.cdx.json \
                             ${FINAL_IMAGE}
