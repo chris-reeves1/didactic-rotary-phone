@@ -54,10 +54,11 @@ pipeline {
                         script {
                             catchError(buildResult: 'UNSTABLE', stageResult: 'UNSTABLE') {
                                 sh """
-                                    python3 -m venv venv
-                                    . venv/bin/activate
+                                    python3 -m venv .venv
+                                    . .venv/bin/activate
                                     pip install -r requirements.txt
                                     python3 -m unittest -v test_app.py
+                                    deactivate
                                 """
                             }
                         }
