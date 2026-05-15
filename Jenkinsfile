@@ -76,7 +76,7 @@ pipeline {
                                 sonarsource/sonar-scanner-cli \
                                 -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
                                 -Dsonar.sources=. \
-                                -Dsonar.exclusions=.venv/**,venv/**,__pycache__/**,**/*.pyc
+                                -Dsonar.exclusions=.venv/**,venv/**,__pycache__/**,**/*.pyc,.trivycache*/**
                             """
                         }
                     }
